@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AMPLE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('file:///C:/Users/User/Documents/AMPLE%20BI/Inventory%20Dashboard%203-1.svg'); /* Local file path */
+            background-size: cover;
+            background-position: center;
+            z-index: -1; /* Ensure background stays behind content */
+        }
+
+        .bar {
+            position: absolute;
+            width: 100%;
+            height: 50px; /* Corrected height */
+            left: 0;
+            top: 0;
+            background: #ECF1F9;
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            display: flex;
+            align-items: center;
+            z-index: 1; /* Ensure the bar stays on top of other content */
+        }
+
+        .logo {
+            width: 200px; /* Adjusted width */
+            height: 60px; /* Adjusted height */
+            background: url('file:///C:/Users/User/Documents/AMPLE%20BI/logo%20without%20background%202.svg') no-repeat center;
+            background-size: contain;
+            margin-left: 12px;
+            margin-top: 7px; /* Move logo down slightly */
+        }
+
+        .left-panel {
+            position: absolute;
+            width: 300px; /* Reduced width */
+            top: 50px; /* Adjusted top to match the bar height */
+            bottom: 0;
+            left: 0;
+            background: rgba(29, 29, 90, 0.8);
+            border-right: 1px solid #FFFFFF;
+            overflow-y: auto;
+            padding-top: 0;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .left-panel.hidden {
+            transform: translateX(-100%);
+        }
+
+        .rectangle {
+            width: 100%;
+            height: 40px; /* Reduced height */
+            background: rgba(29, 29, 90, 0.8);
+            border: 1px solid #FFFFFF;
+            display: flex;
+            align-items: center;
+            padding-left: 20px; /* Adjusted padding */
+            color: #FFFFFF;
+            font-family: 'Times New Roman';
+            font-weight: 700;
+            font-size: 17px; /* Reduced font size */
+            line-height: 22px;
+            cursor: pointer;
+        }
+
+        .rectangle.inv {
+            background: rgba(213, 229, 250, 0.9);
+            color: #003070;
+            font-weight: 400;
+            font-size: 17px; /* Reduced font size */
+            line-height: 20px;
+        }
+
+        .rectangle.inv.nested-item {
+            background: rgba(255, 255, 255, 0.9); /* White background with 90% opacity */
+            padding-left: 40px; /* Adjusted padding */
+            color: #003070;
+        }
+
+        .nested {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+        }
+
+        .nested.visible {
+            max-height: 1000px; /* Arbitrary high value to allow expansion */
+        }
+
+        .icon {
+            position: absolute;
+            width: 36px;
+            height: 25px;
+            top: 60px; /* Adjusted top to match the bar height */
+            left: 10px;
+            cursor: pointer;
+            transition: left 0.3s ease-in-out;
+        }
+
+        .icon.shifted {
+            left: 313px; /* Adjusted for new left panel width */
+        }
+
+        .dynamic-rectangle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+            border-radius: 15px;
+            display: none; /* Hide initially */
+        }
+
+        /* Rectangle Styles */
+        #rectangle9 {
+            width: 100%;
+            height: 30%; 
+            left: 0;
+            top: 10%;
+        }
+
+        #rectangle33 {
+            width: 80%;
+            height: 25%; 
+            left: 10%;
+            top: 45%;
+        }
+
+        #rectangle36 {
+            width: 40%;
+            height: 25%; 
+            left: 55%;
+            top: 45%;
+        }
+
+        #rectangle26 {
+            width: 20%;
+            height: 10%; 
+            left: 10%;
+            top: 20%;
+        }
+
+        #rectangle27 {
+            width: 20%;
+            height: 10%; 
+            left: 10%;
+            top: 35%;
+        }
+
+        #rectangle10 {
+            width: 20%;
+            height: 10%; 
+            left: 10%;
+            top: 10%;
+        }
+    </style>
+</head>
+<body>
+    <div class="background"></div>
+    <div class="bar">
+        <div class="logo"></div>
+    </div>
+    <div class="left-panel hidden" id="leftPanel">
+        <div class="rectangle" id="strategyDashboard">Strategy Dashboard</div>
+        <div class="nested" id="strategyDashboardContent">
+            <div class="rectangle inv" id="salesPerformance">Sales Performance</div>
+            <div class="nested" id="salesPerformanceContent">
+                <div class="rectangle inv nested-item">Key Product Sales Data</div>
+                <div class="rectangle inv nested-item">Inventory Purchase Aged</div>
+                <div class="rectangle inv nested-item">Sales Forecasting</div>
+            </div>
+            <div class="rectangle inv">Goal Achievement Status</div>
+            <div class="rectangle inv">Operational Performance</div>
+            <div class="rectangle inv">Product Development Progress</div>
+            <div class="rectangle inv">Risk Indicators and Alerts</div>
+        </div>
+        <div class="rectangle" id="inventoryPlanning">Inventory & Planning (Demand)</div>
+        <div class="nested" id="inventoryPlanningContent">
+            <div class="rectangle inv" id="inventoryAged">Inventory Aged</div>
+            <div class="nested" id="inventoryAgedContent">
+                <div class="rectangle inv nested-item" id="inventoryAgedByMoving">Inventory Aged by Moving</div>
+                <div class="rectangle inv nested-item">Inventory Purchase Aged</div>
+                <div class="rectangle inv nested-item">Inventory Production</div>
+            </div>
+            <div class="rectangle inv">Inventory Demand</div>
+            <div class="rectangle inv">Inventory Rolling Forecast</div>
+            <div class="rectangle inv">Weight-Average by Monthly</div>
+            <div class="rectangle inv">Weight-Average by Weekly</div>
+        </div>
+        <div class="rectangle">Production & MES</div>
+        <div class="rectangle">Performance Management</div>
+        <div class="rectangle">Sales & Distribution</div>
+        <div class="rectangle">Profit & Finance</div>
+        <div class="rectangle">Logistics Management</div>
+        <div class="rectangle">Advertising Management</div>
+        <div class="rectangle">Costing & Pricing</div>
+        <div class="rectangle">Quality Management System</div>
+        <div class="rectangle">Profit Center (BU&KPI)</div>
+        <div class="rectangle">Query Studio</div>
+    </div>
+    <img src="file:///C:/Users/User/Documents/AMPLE%20BI/%F0%9F%A6%86%20icon%20_menu_.svg" alt="Menu" class="icon" id="menuIcon">
+    
+    <script>
+        const menuIcon = document.getElementById('menuIcon');
+        const leftPanel = document.getElementById('leftPanel');
+        const strategyDashboard = document.getElementById('strategyDashboard');
+        const strategyDashboardContent = document.getElementById('strategyDashboardContent');
+        const salesPerformance = document.getElementById('salesPerformance');
+        const salesPerformanceContent = document.getElementById('salesPerformanceContent');
+        const inventoryPlanning = document.getElementById('inventoryPlanning');
+        const inventoryPlanningContent = document.getElementById('inventoryPlanningContent');
+        const inventoryAged = document.getElementById('inventoryAged');
+        const inventoryAgedContent = document.getElementById('inventoryAgedContent');
+        const inventoryAgedByMoving = document.getElementById('inventoryAgedByMoving');
+
+        menuIcon.addEventListener('click', () => {
+            leftPanel.classList.toggle('hidden');
+            menuIcon.classList.toggle('shifted');
+            adjustRectangles();
+        });
+
+        strategyDashboard.addEventListener('click', () => {
+            toggleVisibility(strategyDashboardContent);
+        });
+
+        salesPerformance.addEventListener('click', () => {
+            toggleVisibility(salesPerformanceContent);
+        });
+
+        inventoryPlanning.addEventListener('click', () => {
+            toggleVisibility(inventoryPlanningContent);
+        });
+
+        inventoryAged.addEventListener('click', () => {
+            toggleVisibility(inventoryAgedContent);
+        });
+
+        inventoryAgedByMoving.addEventListener('click', () => {
+            toggleVisibility(document.getElementById('rectangle9'));
+            toggleVisibility(document.getElementById('rectangle33'));
+            toggleVisibility(document.getElementById('rectangle36'));
+            toggleVisibility(document.getElementById('rectangle26'));
+            toggleVisibility(document.getElementById('rectangle27'));
+            toggleVisibility(document.getElementById('rectangle10'));
+        });
+
+        function toggleVisibility(element) {
+            if (element.classList.contains('visible')) {
+                element.classList.remove('visible');
+                element.style.display = 'none';
+            } else {
+                element.classList.add('visible');
+                element.style.display = 'block';
+            }
+        }
+
+        function adjustRectangles() {
+            const leftPanelWidth = leftPanel.classList.contains('hidden') ? 0 : 300;
+            document.querySelectorAll('.dynamic-rectangle').forEach(rect => {
+                rect.style.marginLeft = `${leftPanelWidth}px`;
+            });
+        }
+
+        // Create rectangles on load
+        document.addEventListener('DOMContentLoaded', () => {
+            const content = document.body;
+            const rectangles = [
+                { id: 'rectangle9', width: '1313px', height: '408px', left: '509px', top: '186px' },
+                { id: 'rectangle33', width: '1099px', height: '319px', left: '121px', top: '636px' },
+                { id: 'rectangle36', width: '556px', height: '319px', left: '1266px', top: '636px' },
+                { id: 'rectangle26', width: '338px', height: '116px', left: '121px', top: '332px' },
+                { id: 'rectangle27', width: '338px', height: '117px', left: '121px', top: '477px' },
+                { id: 'rectangle10', width: '338px', height: '116px', left: '121px', top: '186px' }
+            ];
+
+            rectangles.forEach(rect => {
+                const rectangle = document.createElement('div');
+                rectangle.className = 'dynamic-rectangle';
+                rectangle.id = rect.id;
+                Object.assign(rectangle.style, {
+                    width: rect.width,
+                    height: rect.height,
+                    left: rect.left,
+                    top: rect.top
+                });
+                content.appendChild(rectangle);
+            });
+        });
+    </script>
+</body>
+</html>
